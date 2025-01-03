@@ -1,0 +1,21 @@
+org 1000h
+msj db "hola mundo"
+fin db ?
+car db 'o'
+org 3000h
+contar_car:mov cl,0
+loop:cmp [bx],ah
+jnz sigo
+add cl,1
+sigo:inc bx
+dec al 
+cmp al,0
+jnz loop
+ret
+org 2000h
+mov bx, offset msj
+mov al,offset fin-offset msj
+mov ah,car
+call contar_car
+hlt
+end

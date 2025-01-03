@@ -1,0 +1,31 @@
+org 1000h
+A db 5
+B db 3
+res dw ?
+org 3000h
+mul:mov bx,sp
+    add bx,4
+    mov bx,[bx]
+    mov al,[bx]
+    mov bx,sp
+    add bx,2
+    mov bx,[bx]
+    mov ah,[bx]
+
+    mov cx,0
+suma:   add cl,al
+    dec ah 
+    jnz suma
+ret
+org 2000h
+mov bx,offset A
+push bx 
+mov bx, offset B
+push bx 
+call mul
+pop bx
+pop bx
+mov res,cx
+
+hlt
+end

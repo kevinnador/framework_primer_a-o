@@ -1,0 +1,55 @@
+org 1000h
+intentos db 3
+ingresa_palabra db "ingrese palabra a adivinar: "
+adivina db "comenza a adivinar"
+ganaste db "adivinaste!"
+perdiste db "perdiste, la palabra era: "
+
+string db ?
+org 1200
+evaluar db ?
+
+org 2000h
+mov bx, offset ingresa_palabra
+mov al, offset adivina-offset ingresa_palabra 
+int 7
+mov cl,0
+mov dh,0
+mov bx, offset string 
+loop: int 6
+      mov al,byte ptr[bx]
+      inc bx
+      inc cl
+      cmp al,'.'
+      jnz loop
+
+mov dh,intentos
+mov ax, offset string
+ volver:mov bx, offset evaluar
+        int 6
+        mov dl,byte ptr[bx]
+        mov bx, ax
+        cmp dl,byte ptr [bx]
+        jz sigo
+        dec dh
+        jnz volver
+        jmp perdi
+sigo: dec cl
+      mov bx,ax
+      mov al,1
+      int 7
+      mov ax, bx
+      inc ax
+      cmp cl,0
+      jnz volver
+      jmp wi
+perdi: mov bx,offset perdiste
+        mov al,offset string- offset perdiste
+        add al,cl
+        int 7
+        jmp fin
+wi: mov bx,offset ganaste
+    mov al,offset perdiste-offset ganaste
+    int 7
+fin: hlt
+end

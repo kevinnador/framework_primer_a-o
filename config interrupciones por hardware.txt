@@ -1,0 +1,23 @@
+eoi equ 20h
+imr equ 21h
+int0 equ 24h 
+n_f10 equ 15
+
+org 60 ; dentro del vec de int, se multiplica el valor de la int0(15)*4= 60
+ip_f10 dw rut_f10
+org 3000h
+rut_f10: push ax
+        inc dx
+        mov al,eoi
+        out eoi,al
+        pop ax
+      iret
+org 2000h
+mov dx,0
+mov al, 0feh
+out imr,al
+mov al, n_f10
+out int0,al
+loop: jmp loop
+hlt
+end
